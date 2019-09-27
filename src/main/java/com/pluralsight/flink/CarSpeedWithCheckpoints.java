@@ -2,6 +2,7 @@ package com.pluralsight.flink;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -25,6 +26,12 @@ public class CarSpeedWithCheckpoints {
         env.getCheckpointConfig()
                 .setMaxConcurrentCheckpoints(1);
         env.setStateBackend(new FsStateBackend("file:///c:\\temp\\checkpoints"));
+
+        // Configuring Restart Strategy (No Restart, Fixed Delay or Failure Rate)
+        env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
+                2, // number of attempts
+                2000 // time in milliseconds between attempts
+        ));
 
         env.socketTextStream("localhost", 9999)
                 .map(new CarSpeeds.Speed())
