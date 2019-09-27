@@ -28,7 +28,7 @@ public class CarSpeeds {
         env.execute("Average speed since last speeding");
     }
 
-    private static class Speed implements MapFunction<String, Tuple2<Integer, Double>> {
+    public static class Speed implements MapFunction<String, Tuple2<Integer, Double>> {
         @Override
         public Tuple2<Integer, Double> map(String value) throws Exception {
 
