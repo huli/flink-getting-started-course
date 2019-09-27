@@ -16,10 +16,13 @@ public class WordCountWithWindows {
         env.socketTextStream("localhost", 9999)
                 .flatMap(new WordCountSplitter())
                 .keyBy(0)
+
                 // Use non overlapping tumpling window
                 // .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
+
                 // Use overlapping sliding window
                 .window(SlidingProcessingTimeWindows.of(Time.seconds(30), Time.seconds(5)))
+
                 .sum(1)
                 .print();
 
